@@ -8,18 +8,17 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
-DATA_PATH = Path("data/raw/telco_churn.csv")
+DATA_PATH = Path("data/raw/Telco-Customer-Churn.csv")
 
 
 def load_data(path: Path = DATA_PATH) -> pd.DataFrame:
     """Load the churn dataset from a CSV file."""
     if not path.exists():
         raise FileNotFoundError(
-            f"Dataset not found at {path}. Add the CSV file to data/raw/."
+            f"Dataset not found at {path}. Run 'python data/download_data.py' first."
         )
 
-    df = pd.read_csv(path)
-    return df
+    return pd.read_csv(path)
 
 
 def prepare_target(df: pd.DataFrame) -> pd.DataFrame:
@@ -36,8 +35,7 @@ def prepare_target(df: pd.DataFrame) -> pd.DataFrame:
         raise ValueError("The dataset must contain a 'Churn' column.")
 
     df["Churn"] = df["Churn"].map({"Yes": 1, "No": 0})
-    df = df.dropna(subset=["Churn"])
-    return df
+    return df.dropna(subset=["Churn"])
 
 
 def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
