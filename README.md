@@ -2,32 +2,37 @@
 
 Projeto de Machine Learning para prever a probabilidade de um cliente cancelar um serviço (churn).
 
-Este projeto faz parte da minha evolução prática como **AI Engineer**, conectando análise de dados, pré-processamento, treinamento, avaliação e organização de um pipeline de Machine Learning.
+Este projeto faz parte da minha evolução prática como **AI Engineer**, conectando análise de dados, pré-processamento, treinamento, avaliação, comparação de modelos e organização de um pipeline reproduzível.
 
 ## 🎯 Objetivo
 
 Construir um pipeline de ponta a ponta capaz de:
 
 - carregar e preparar dados;
-- analisar características dos clientes;
+- explorar o comportamento dos clientes;
 - transformar variáveis categóricas e numéricas;
 - treinar modelos de classificação;
-- avaliar o desempenho dos modelos;
+- comparar modelos;
+- avaliar desempenho com métricas de classificação;
 - gerar previsões de churn;
-- organizar o projeto de forma reproduzível.
+- automatizar verificações com GitHub Actions.
 
 ## 🧠 Pipeline
 
 ```text
-Dados
+Dataset
   ↓
 Análise exploratória
   ↓
-Pré-processamento
+Limpeza e preparação
   ↓
 Train / Test Split
   ↓
+Pré-processamento
+  ↓
 Treinamento
+  ↓
+Comparação de modelos
   ↓
 Avaliação
   ↓
@@ -44,29 +49,34 @@ Predição de Churn
 - Seaborn
 - Joblib
 - Jupyter Notebook
+- Pytest
+- GitHub Actions
 
 ## 📂 Estrutura
 
 ```text
 ml-customer-churn-pipeline/
 │
+├── .github/
+│   └── workflows/
+│       └── python-ci.yml
 ├── data/
-│   └── README.md
-│
+│   ├── README.md
+│   └── download_data.py
 ├── notebooks/
 │   └── 01_exploratory_analysis.ipynb
-│
 ├── src/
 │   ├── data_processing.py
 │   ├── train.py
-│   └── evaluate.py
-│
+│   ├── evaluate.py
+│   ├── compare_models.py
+│   └── predict.py
+├── tests/
+│   └── test_data_processing.py
 ├── models/
 │   └── .gitkeep
-│
 ├── reports/
 │   └── README.md
-│
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -74,22 +84,26 @@ ml-customer-churn-pipeline/
 
 ## 📊 Dataset
 
-O projeto será estruturado para trabalhar com um conjunto de dados de clientes contendo informações de perfil, serviços contratados, valores pagos e indicador de churn.
+O projeto utiliza o **IBM Telco Customer Churn**, um dataset público com informações de clientes, serviços contratados, valores cobrados e a variável-alvo `Churn`.
 
-A fonte e os detalhes do dataset serão documentados em `data/README.md`.
+O CSV bruto não é versionado no GitHub. Para obter os dados:
 
-## 📈 Avaliação
+```bash
+python data/download_data.py
+```
 
-As principais métricas utilizadas serão:
+## 🔬 Modelos
 
-- Accuracy
+O projeto começa com **Logistic Regression** como baseline e também possui uma etapa de comparação com **Random Forest**.
+
+A comparação considera principalmente:
+
 - Precision
 - Recall
 - F1-score
 - ROC-AUC
-- Matriz de confusão
 
-**Os resultados serão adicionados após a execução do treinamento.**
+Os resultados reais são gerados somente após a execução do pipeline, evitando números inventados no README.
 
 ## 🚀 Como executar
 
@@ -99,18 +113,10 @@ As principais métricas utilizadas serão:
 python -m venv .venv
 ```
 
-### 2. Ativar o ambiente
-
-Windows:
+### 2. Ativar no Windows
 
 ```bash
 .venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-source .venv/bin/activate
 ```
 
 ### 3. Instalar dependências
@@ -119,28 +125,48 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Executar treinamento
+### 4. Baixar o dataset
+
+```bash
+python data/download_data.py
+```
+
+### 5. Treinar o modelo baseline
 
 ```bash
 python src/train.py
 ```
 
-### 5. Avaliar o modelo
+### 6. Avaliar
 
 ```bash
 python src/evaluate.py
 ```
 
-## 🔬 Próximas etapas
+### 7. Comparar modelos
 
-- análise exploratória com visualizações;
-- comparação entre modelos;
-- ajuste de hiperparâmetros;
+```bash
+python src/compare_models.py
+```
+
+### 8. Executar testes
+
+```bash
+pytest -q
+```
+
+## ⚙️ Integração contínua
+
+O projeto possui um workflow de **GitHub Actions** que instala as dependências, verifica a sintaxe Python e executa os testes a cada alteração na branch principal ou pull request.
+
+## 📈 Próximas evoluções
+
 - análise de importância das variáveis;
-- tratamento de desbalanceamento;
-- criação de uma API para predição;
-- containerização com Docker;
-- evolução para uma arquitetura de ML mais próxima de produção.
+- ajuste de hiperparâmetros;
+- API para predição;
+- Docker;
+- monitoramento de modelo;
+- evolução para uma arquitetura de ML próxima de produção.
 
 ## 👩🏽‍💻 Sobre mim
 
